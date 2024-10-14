@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Simon001.PathFinding
 {
     public partial class AStar

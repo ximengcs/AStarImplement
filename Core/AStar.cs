@@ -1,28 +1,28 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Simon001.PathFinding
 {
     public partial class AStar
     {
-        private IAStarItem m_StartItem;
         private IAStarHelper m_Helper;
         private NodeCollection m_OpenList;
         private NodeCollection m_CloseList;
         private List<IAStarItem> m_Cache;
 
-        public AStar(IAStarHelper helper, IAStarItem startItem)
+        public AStar(IAStarHelper helper)
         {
             m_Helper = helper;
-            m_StartItem = startItem;
             m_OpenList = new NodeCollection(m_Helper);
             m_CloseList = new NodeCollection(m_Helper);
             m_Cache = new List<IAStarItem>();
         }
 
-        public AStarPath Execute(IAStarItem endItem)
+        public AStarPath Execute(IAStarItem startItem, IAStarItem endItem)
         {
             AStarNode endNode = null;
             bool finish = false;
-            m_OpenList.Add(new AStarNode(m_StartItem, m_Helper.GetHValue(m_StartItem, endItem)));
+            m_OpenList.Add(new AStarNode(startItem, m_Helper.GetHValue(startItem, endItem)));
             int count = 10000;
             while (!m_OpenList.Empty && !finish && count-- > 0)
             {
