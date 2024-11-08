@@ -5,6 +5,9 @@ namespace Simon001.PathFinding
 {
     public partial class AStar
     {
+        public const int INVALID = -1;
+        public const int MAX_VALUE = int.MaxValue;
+
         private IAStarHelper m_Helper;
         private NodeCollection m_OpenList;
         private NodeCollection m_CloseList;
@@ -38,15 +41,19 @@ namespace Simon001.PathFinding
                         continue;
                     if (!m_OpenList.TryGet(child, out AStarNode childNode))
                     {
-                        childNode = new AStarNode(child, m_Helper.GetHValue(child, endItem));
-                        m_OpenList.Add(childNode);
+                        int hValue = m_Helper.GetHValue(child, endItem);
+                        if (hValue != INVALID)
+                        {
+                            childNode = new AStarNode(child, hValue);
+                            m_OpenList.Add(childNode);
+                        }
                     }
 
                     int gValue = m_Helper.GetGValue(itemNode.Item, childNode.Item);
-                    if (gValue != -1)
+                    if (gValue != INVALID)
                     {
-                        int newFValue = gValue + itemNode.GValue + childNode.HValue;
-                        if (childNode.GValue == -1 || childNode.FValue > newFValue)
+                        int newFValue = gValue + childNode.HValue;
+                        if (childNode.GValue == INVALID || childNode.FValue > newFValue)
                         {
                             childNode.Parent = itemNode;
                             childNode.GValue = newFValue;
