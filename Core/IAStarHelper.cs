@@ -13,7 +13,7 @@ namespace Simon001.PathFinding
         /// </summary>
         /// <param name="item">目标单元格实例</param>
         /// <param name="result">结果列表, 传入列表为空，不用手动清空</param>
-        void GetItemRound(IAStarItem item, List<IAStarItem> result);
+        void GetItemRound(IAStarItem item, HashSet<IAStarItem> result);
 
         /// <summary>
         /// 获取单元格实例的唯一标识

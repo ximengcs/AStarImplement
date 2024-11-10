@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace Simon001.PathFinding
@@ -11,14 +12,17 @@ namespace Simon001.PathFinding
         private IAStarHelper m_Helper;
         private NodeCollection m_OpenList;
         private NodeCollection m_CloseList;
-        private List<IAStarItem> m_Cache;
+        private HashSet<IAStarItem> m_Cache;
 
-        public AStar(IAStarHelper helper)
+        private Action<string> Logger;
+
+        public AStar(IAStarHelper helper, Action<string> logger)
         {
+            Logger = logger;
             m_Helper = helper;
             m_OpenList = new NodeCollection(m_Helper);
             m_CloseList = new NodeCollection(m_Helper);
-            m_Cache = new List<IAStarItem>();
+            m_Cache = new HashSet<IAStarItem>();
         }
 
         public AStarPath Execute(IAStarItem startItem, IAStarItem endItem)
@@ -49,22 +53,26 @@ namespace Simon001.PathFinding
                         }
                     }
 
-                    int gValue = m_Helper.GetGValue(itemNode.Item, childNode.Item);
-                    if (gValue != INVALID)
+                    if (childNode != null)
                     {
-                        int newFValue = gValue + childNode.HValue;
-                        if (childNode.GValue == INVALID || childNode.FValue > newFValue)
+                        int gValue = m_Helper.GetGValue(itemNode.Item, childNode.Item);
+                        if (gValue != INVALID)
                         {
-                            childNode.Parent = itemNode;
-                            childNode.GValue = newFValue;
+                            int newFValue = gValue + childNode.HValue;
+                            if (childNode.GValue == INVALID || childNode.FValue > newFValue)
+                            {
+                                Logger($"compare {childNode.GetHashCode()}  {childNode.FValue} {childNode.GValue}  -->  g {gValue} h {childNode.HValue} {newFValue} ");
+                                childNode.Parent = itemNode;
+                                childNode.GValue = gValue;
+                            }
                         }
-                    }
 
-                    if (child == endItem)
-                    {
-                        finish = true;
-                        endNode = childNode;
-                        break;
+                        if (child == endItem)
+                        {
+                            finish = true;
+                            endNode = childNode;
+                            break;
+                        }
                     }
                 }
             }
