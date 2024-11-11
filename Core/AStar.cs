@@ -27,13 +27,24 @@ namespace Simon001.PathFinding
 
         public AStarPath Execute(IAStarItem startItem, IAStarItem endItem)
         {
+            AStarNode startNode = new AStarNode(startItem, m_Helper.GetHValue(startItem, endItem));
+            startNode.OriginGValue = 1;
+            startNode.GValue = 1;
             AStarNode endNode = null;
-            bool finish = false;
-            m_OpenList.Add(new AStarNode(startItem, m_Helper.GetHValue(startItem, endItem)));
+            m_OpenList.Add(startNode);
             int count = 10000;
-            while (!m_OpenList.Empty && !finish && count-- > 0)
+            while (!m_OpenList.Empty && count-- > 0)
             {
                 AStarNode itemNode = m_OpenList.RemoveMinimum();
+
+                if (itemNode.Item == endItem)
+                {
+                    endNode = itemNode;
+                    break;
+                }
+
+                Logger($"itemNode ({m_OpenList.Count}) {itemNode.Item} {itemNode.OriginGValue} {itemNode.FValue} {count} ");
+
                 m_CloseList.Add(itemNode);
 
                 m_Cache.Clear();
@@ -46,32 +57,27 @@ namespace Simon001.PathFinding
                     if (!m_OpenList.TryGet(child, out AStarNode childNode))
                     {
                         int hValue = m_Helper.GetHValue(child, endItem);
-                        if (hValue != INVALID)
-                        {
-                            childNode = new AStarNode(child, hValue);
-                            m_OpenList.Add(childNode);
-                        }
+                        childNode = new AStarNode(child, hValue);
+                        m_OpenList.Add(childNode);
                     }
 
                     if (childNode != null)
                     {
                         int gValue = m_Helper.GetGValue(itemNode.Item, childNode.Item);
-                        if (gValue != INVALID)
+                        if(gValue < childNode.OriginGValue)
                         {
-                            int newFValue = gValue + childNode.HValue;
-                            if (childNode.GValue == INVALID || childNode.FValue > newFValue)
-                            {
-                                Logger($"compare {childNode.GetHashCode()}  {childNode.FValue} {childNode.GValue}  -->  g {gValue} h {childNode.HValue} {newFValue} ");
-                                childNode.Parent = itemNode;
-                                childNode.GValue = gValue;
-                            }
+                            childNode.OriginGValue = gValue;
                         }
-
-                        if (child == endItem)
+                        
+                        gValue += itemNode.GValue;
+                        if (gValue < childNode.GValue)
                         {
-                            finish = true;
-                            endNode = childNode;
-                            break;
+                            childNode.Parent = itemNode;
+                            childNode.GValue = gValue;
+
+
+                            Logger($"eee {childNode.Item} {childNode.OriginGValue} {childNode.HValue} {childNode.FValue} ");
+
                         }
                     }
                 }

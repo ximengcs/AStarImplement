@@ -1,5 +1,4 @@
 ﻿
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Simon001.PathFinding
@@ -19,6 +18,8 @@ namespace Simon001.PathFinding
                 }
             }
 
+            public int Count => m_Nodes.Count;
+
             public NodeCollection(IAStarHelper helper)
             {
                 m_Helper = helper;
@@ -35,6 +36,7 @@ namespace Simon001.PathFinding
                         minimum = node;
                     }
                 }
+
                 if (minimum != null)
                 {
                     m_Nodes.Remove(m_Helper.GetUniqueId(minimum.Item));
