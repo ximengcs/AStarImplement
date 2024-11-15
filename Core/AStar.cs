@@ -32,8 +32,8 @@ namespace Simon001.PathFinding
             startNode.GValue = 1;
             AStarNode endNode = null;
             m_OpenList.Add(startNode);
-            int count = 10000;
-            while (!m_OpenList.Empty && count-- > 0)
+            int count = 0;
+            while (!m_OpenList.Empty && count++ < 10000)
             {
                 AStarNode itemNode = m_OpenList.RemoveMinimum();
 
@@ -43,7 +43,7 @@ namespace Simon001.PathFinding
                     break;
                 }
 
-                Logger($"itemNode ({m_OpenList.Count}) {itemNode.Item} {itemNode.OriginGValue} {itemNode.FValue} {count} ");
+                //Logger($"itemNode ({m_OpenList.Count}) {itemNode.Item} {itemNode.OriginGValue} {itemNode.FValue} {count} ");
 
                 m_CloseList.Add(itemNode);
 
@@ -75,13 +75,13 @@ namespace Simon001.PathFinding
                             childNode.Parent = itemNode;
                             childNode.GValue = gValue;
 
-
-                            Logger($"eee {childNode.Item} {childNode.OriginGValue} {childNode.HValue} {childNode.FValue} ");
-
+                            //Logger($"eee {childNode.Item} {childNode.OriginGValue} {childNode.HValue} {childNode.FValue} ");
                         }
                     }
                 }
             }
+
+            Logger($" check count {count}");
 
             AStarPath path = null;
             if (endNode != null)
