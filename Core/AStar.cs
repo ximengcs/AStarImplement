@@ -81,7 +81,7 @@ namespace Simon001.PathFinding
                 }
             }
 
-            Logger($" check count {count}");
+            Logger($"astar check relation count {count}");
 
             AStarPath path = null;
             if (endNode != null)

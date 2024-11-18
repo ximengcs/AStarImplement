@@ -8,6 +8,10 @@ namespace Simon001.PathFinding
     {
         private List<IAStarItem> m_Items;
 
+        public int Count => m_Items.Count;
+
+        public IAStarItem this[int index] => m_Items[index];
+
         internal AStarPath(AStarNode node)
         {
             m_Items = new List<IAStarItem>();
