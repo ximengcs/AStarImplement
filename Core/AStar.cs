@@ -1,24 +1,16 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Simon001.PathFinding
 {
     public partial class AStar
     {
-        public const int INVALID = -1;
-        public const int MAX_VALUE = int.MaxValue;
-
         private IAStarHelper m_Helper;
         private NodeCollection m_OpenList;
         private NodeCollection m_CloseList;
         private HashSet<IAStarItem> m_Cache;
 
-        private Action<string> Logger;
-
-        public AStar(IAStarHelper helper, Action<string> logger)
+        public AStar(IAStarHelper helper)
         {
-            Logger = logger;
             m_Helper = helper;
             m_OpenList = new NodeCollection(m_Helper);
             m_CloseList = new NodeCollection(m_Helper);
@@ -32,8 +24,7 @@ namespace Simon001.PathFinding
             startNode.GValue = 1;
             AStarNode endNode = null;
             m_OpenList.Add(startNode);
-            int count = 0;
-            while (!m_OpenList.Empty && count++ < 10000)
+            while (!m_OpenList.Empty)
             {
                 AStarNode itemNode = m_OpenList.RemoveMinimum();
 
@@ -42,8 +33,6 @@ namespace Simon001.PathFinding
                     endNode = itemNode;
                     break;
                 }
-
-                //Logger($"itemNode ({m_OpenList.Count}) {itemNode.Item} {itemNode.OriginGValue} {itemNode.FValue} {count} ");
 
                 m_CloseList.Add(itemNode);
 
@@ -74,14 +63,10 @@ namespace Simon001.PathFinding
                         {
                             childNode.Parent = itemNode;
                             childNode.GValue = gValue;
-
-                            //Logger($"eee {childNode.Item} {childNode.OriginGValue} {childNode.HValue} {childNode.FValue} ");
                         }
                     }
                 }
             }
-
-            Logger($"astar check relation count {count}");
 
             AStarPath path = null;
             if (endNode != null)
