@@ -44,13 +44,13 @@ namespace Simon001.PathFinding
                 return minimum;
             }
 
-            public bool Contains(IAStarItem item)
+            public bool Contains(object item)
             {
                 int id = m_Helper.GetUniqueId(item);
                 return m_Nodes.ContainsKey(id);
             }
 
-            public bool TryGet(IAStarItem item, out AStarNode node)
+            public bool TryGet(object item, out AStarNode node)
             {
                 int id = m_Helper.GetUniqueId(item);
                 return m_Nodes.TryGetValue(id, out node);

@@ -6,9 +6,9 @@ namespace Simon001.PathFinding
         private int m_HValue;
         private int m_GValue;
         private int m_OriginGValue;
-        private IAStarItem m_Item;
+        private object m_Item;
 
-        public IAStarItem Item => m_Item;
+        public object Item => m_Item;
 
         public AStarNode Parent { get; set; }
 
@@ -28,7 +28,7 @@ namespace Simon001.PathFinding
 
         public int HValue => m_HValue;
 
-        public AStarNode(IAStarItem item, int hValue)
+        public AStarNode(object item, int hValue)
         {
             m_Item = item;
             m_HValue = hValue;

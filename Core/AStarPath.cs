@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 namespace Simon001.PathFinding
 {
-    public class AStarPath : IEnumerable<IAStarItem>
+    public class AStarPath : IEnumerable<object>
     {
-        private List<IAStarItem> m_Items;
+        private List<object> m_Items;
 
         public int Count => m_Items.Count;
 
-        public IAStarItem this[int index] => m_Items[index];
+        public object this[int index] => m_Items[index];
 
         internal AStarPath(AStarNode node)
         {
-            m_Items = new List<IAStarItem>();
+            m_Items = new List<object>();
             InnerRecursiveAdd(node);
         }
 
-        public IEnumerator<IAStarItem> GetEnumerator()
+        public IEnumerator<object> GetEnumerator()
         {
             return m_Items.GetEnumerator();
         }

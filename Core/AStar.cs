@@ -7,17 +7,17 @@ namespace Simon001.PathFinding
         private IAStarHelper m_Helper;
         private NodeCollection m_OpenList;
         private NodeCollection m_CloseList;
-        private HashSet<IAStarItem> m_Cache;
+        private HashSet<object> m_Cache;
 
         public AStar(IAStarHelper helper)
         {
             m_Helper = helper;
             m_OpenList = new NodeCollection(m_Helper);
             m_CloseList = new NodeCollection(m_Helper);
-            m_Cache = new HashSet<IAStarItem>();
+            m_Cache = new HashSet<object>();
         }
 
-        public AStarPath Execute(IAStarItem startItem, IAStarItem endItem)
+        public AStarPath Execute(object startItem, object endItem)
         {
             AStarNode startNode = new AStarNode(startItem, m_Helper.GetHValue(startItem, endItem));
             startNode.OriginGValue = 1;
@@ -39,7 +39,7 @@ namespace Simon001.PathFinding
                 m_Cache.Clear();
                 m_Helper.GetItemRound(itemNode.Item, m_Cache);
 
-                foreach (IAStarItem child in m_Cache)
+                foreach (object child in m_Cache)
                 {
                     if (m_CloseList.Contains(child))
                         continue;
